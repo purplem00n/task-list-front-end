@@ -13,24 +13,44 @@ const TASKS = [
   {
     id: 2,
     title: 'Cook Pasta',
-    isComplete: true,
+    isComplete: false,
+  },
+  {
+    id: 3,
+    title: 'Doctor\'s Appointment',
+    isComplete: false,
+  },
+  {
+    id: 4,
+    title: 'Go to Trader Joe\'s',
+    isComplete: false,
   },
 ];
 
 const App = () => {
   const [taskData, setTaskData] = useState(TASKS);
-  const updateTaskData = (id, isComplete) => {
+
+  const updateTaskData = (id) => {
     const newTask = taskData.map((task) => {
       if (task.id === id) {
         const updatedTask = { ...task };
-        if (updatedTask.isComplete !== isComplete) {
-          updatedTask.isComplete = isComplete;
-        }
+        updatedTask.isComplete = !task.isComplete;
         return updatedTask;
       } else {
         return { ...task };
       }
     });
+    console.log(newTask)
+    setTaskData(newTask);
+  };
+
+  const deleteTask = (id) => {
+    const newTask = taskData.filter((task) => {
+      if (task.id !== id) {
+        return {...task};
+      }
+    });
+    console.log(newTask)
     setTaskData(newTask);
   };
 
@@ -40,7 +60,7 @@ const App = () => {
         <h1>Ada&apos;s Task List</h1>
       </header>
       <main>
-        <div><TaskList tasks={TASKS} updateTaskData={updateTaskData} /></div>
+        <div><TaskList tasks={taskData} updateTaskData={updateTaskData} deleteTask={deleteTask}/></div>
       </main>
     </div>
   );

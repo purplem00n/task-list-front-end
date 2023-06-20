@@ -1,24 +1,21 @@
 import PropTypes from 'prop-types';
+import React from 'react';
 
 import './Task.css';
 
-const Task = ({ id, title, isComplete }) => {
-  const [complete, setComplete] = useState(isComplete);
-  const buttonClass = complete ? 'tasks__item__toggle--completed' : '';
+const Task = ({ id, title, isComplete, updateTaskData, deleteTask }) => {
 
   const buttonClass = isComplete ? 'tasks__item__toggle--completed' : '';
-
-
 
   return (
     <li className="tasks__item">
       <button
         className={`tasks__item__toggle ${buttonClass}`}
-        onClick={() => updateTaskData(id, !isComplete)}
+        onClick={() => updateTaskData(id)}
       >
-        {props.title}
+        {title}
       </button>
-      <button className="tasks__item__remove button">x</button>
+      <button className="tasks__item__remove button" onClick={() => {deleteTask(id);}}>x</button>
     </li>
   );
 };
@@ -28,6 +25,7 @@ Task.propTypes = {
   title: PropTypes.string.isRequired,
   isComplete: PropTypes.bool.isRequired,
   updateTaskData: PropTypes.func.isRequired,
+  deleteTask: PropTypes.func.isRequired,
 };
 
 
