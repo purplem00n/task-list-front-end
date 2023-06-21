@@ -11,7 +11,7 @@ const Task = ({ id, title, isComplete, updateTaskData, deleteTask }) => {
     <li className="tasks__item">
       <button
         className={`tasks__item__toggle ${buttonClass}`}
-        onClick={() => updateTaskData(id)}
+        onClick={() => updateTaskData(id, isComplete)}
       >
         {title}
       </button>
