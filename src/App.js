@@ -3,6 +3,7 @@ import TaskList from './components/TaskList.js';
 import './App.css';
 import  { useState, useEffect } from 'react';
 import axios from 'axios';
+import NewTaskForm from './components/NewTaskForm.js';
 
 // // const TASKS = [
 //   {
@@ -31,16 +32,21 @@ const App = () => {
   const [taskData, setTaskData] = useState([]);
   const API = 'https://ariel-task-list-1.onrender.com/tasks';
 
-  useEffect(() => {
+
+  const getAllTasks = () => {
     axios
     .get(API)
     .then((result) => {
-      console.log(result.data);
+      // console.log(result.data);
       setTaskData(result.data);
     })
     .catch(err => {
       console.log(err);
     });
+  };
+
+  useEffect(() => {
+    getAllTasks();
   }, []);
 
   const updateTaskData = (id, isComplete) => {
@@ -70,17 +76,37 @@ const App = () => {
       });
     };
 
+    const postTask = (newTaskData) => {
+      console.log(newTaskData);
+      // const formattedTask = {...newTaskData}
+      axios 
+        .post(API, newTaskData)
+        .then((result) => {
+          console.log(result.data);
+          getAllTasks();
+        })
+        .catch((err)=> {
+          console.log(err);
+        });
+    };
 
   const deleteTask = (id) => {
-    const newTask = taskData.filter((task) => {
-      if (task.id !== id) {
-        return {...task};
-      }
-    });
-    console.log(newTask)
-    setTaskData(newTask);
-  
+    axios
+      .delete(`${API}/${id}`)
+      .then((result) => {
+        const newTask = taskData.filter((task) => {
+          if (task.id !== id) {
+            return {...task};
+          }
+        });
+        // console.log(newTask)
+        setTaskData(newTask);
+  })
+      .catch((err) => {
+        console.log(err)
+      });
   };
+
   return (
     <div className="App">
       <header className="App-header">
@@ -88,6 +114,7 @@ const App = () => {
       </header>
       <main>
         <div><TaskList tasks={taskData} updateTaskData={updateTaskData} deleteTask={deleteTask}/></div>
+        <div><NewTaskForm onFormSubmit={postTask}/></div>
       </main>
     </div>
   );
